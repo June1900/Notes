@@ -196,101 +196,449 @@ print(n)
 
 * 字典推导式
 
-  * ~~~
-    {i: 0 for i in range(0, 10)})
+  * ~~~python
+    {i: 0 for i in range(0, 10)}
     ~~~
 
 #  第六章 文件与输出
 
 ##  19 文件的内建函数
 
+* 文件内建函数和方法
+  * open() 打开文件
+  * read() 输入
+  * readline() 输入一行
+  * seek() 文件内移动
+  * write() 输出
+  * close() 关闭文件 
 
+示例代码：
+
+~~~python
+# 文件操作
+file = open("text.txt", "w")
+file.write("你好时间")
+file.close()
+
+# 文件读取
+filer = open("text.txt")
+print(filer.read())
+filer.close()
+~~~
 
 ##  20 文件的常用操作
 
- 
+* 文件的常用操作
+  * 读取一行
+  * 读取多行
+  * 文件内移动
+
+示例代码：
+
+~~~python
+# 读取一行
+file = open("text.txt")
+print(file.readline())
+file.close()
+# 读取多行
+files = open("text.txt")
+for line in files.readlines():
+    print(line)
+files.close()
+# 控制文件内指针位置
+file = open("text.txt")
+print(file.tell())
+print(file.readline(1))
+print(file.tell())
+
+file.seek(0)
+print(file.tell())
+print(file.readline())
+print(file.tell())
+~~~
 
 #  第七章 错误与异常
 
 ##  21 异常的检测与处理
 
+* 错误 不等于 异常
 
+  * 异常是在出现错误是采用正常控制流以外的动作
+  * 异常的处理一般是：检测到错误，引发异常；对异常进行捕获操作
+
+* ~~~~python
+  try:
+  <检测异常>
+  except Exception[]:
+  <异常处理码>
+  finally:
+  ~~~~
+
+示例代码：
+
+~~~python
+# 异常
+try:
+    year = int(input("输入年份"))
+except ValueError as e:
+    print("输入年份异常 %s" + str(e))
+finally:
+    print("无论是否成功，都执行")
+~~~
 
 #  第八章 函数
 
 ##  22 函数的定义与常用操作
 
+* 函数：是对程序逻辑进行机构化的一种编程方法
 
+  * 函数定义
+
+    * ~~~python
+      def 函数名称():
+          代码
+          return 需要返回的内容
+      ~~~
+
+  * 函数调用
+
+    * ~~~
+      函数名称()
+      ~~~
 
 ##  23 函数的可变长参数
 
+~~~python
+# 可变长参数
+def test(first, *other):
+    print(first + len(other))
 
+
+test(12, 13, 14)
+~~~
 
 ##  24 函数的变量作用域
 
+~~~python
+# 变量的作用域
 
+var1 = 123
+
+
+def func():
+    var1 = 456
+    print(var1)
+
+
+func()
+print(var1)
+~~~
 
 ##  25 函数的迭代器与生成器
 
+~~~python
+# 函数迭代器和生成器
+list = [1, 2, 3, 4, 5]
+it = iter(list)
+print(next(it))
 
+for i in range(10, 20, 4):
+    print(i)
+    
+def ferange(start, stop, step):
+    x = start
+    while x <= stop:
+        # 生成器
+        yield x
+        x += step
+
+
+for i in ferange(10, 20, 0.5):
+    print(i)
+~~~
 
 ##  26 lambda表达式
 
+~~~python
+# 普通函数
+def add(x, y):
+    return x + y
 
+
+print(add(3, 5))
+#lambda表达式
+add2 = lambda x, y: x + y
+
+print(add2(1, 2))
+~~~
 
 ##  27 Python的内建函数
 
+~~~~python
+# 内建函数
+# filter函数
+a = [1, 2, 3, 4, 5]
+print(list(filter(lambda x: x > 2, a)))
+# map函数
+b = [1, 2, 3, 4]
+c = [5, 6, 7, 8]
+print(list(map(lambda x, y: x + y, b, c)))
+# reduce函数
+from functools import reduce
 
+print(reduce(lambda x, y: x + y, [1, 2, 3, 4], 10))
+# zip函数
+for i in zip([1, 2, 3], [4, 5, 6]):
+    print(i)
+
+dicta = {"a": "b", "c": "d"}
+dicta1 = zip(dicta.values(), dicta.keys())
+print(dict(dicta1))
+~~~~
 
 ##  28 闭包的定义
 
+ ~~~python
+def sum(a):
+    def add(b):
+        return a + b
 
+    return add
+
+
+num1 = sum(2)
+print(type(num1))
+print(num1(4))
+ ~~~
 
 ##  29 闭包的使用
 
+~~~~python
+def a_line(a, b):
+    def arg_y(x):
+        return a * x + b
 
+    return arg_y
+
+
+line = a_line(2, 3)
+for i in range(1, 4):
+    print(line(i))
+~~~~
 
 ## 30 装饰器的定义
 
+~~~python
+import time
 
+
+def timmer(func):
+    def wapper():
+        startTime = time.time()
+        func()
+        endTime = time.time()
+        print("运行了 %s 秒" % (endTime - startTime))
+
+    return wapper
+
+
+@timmer
+def i_can_sleep():
+    time.sleep(3)
+
+
+i_can_sleep()
+~~~
 
 ##  31 装饰器的使用
 
+~~~~python
+def new_tips(st):
+    def tips(func):
+        def wapper(a, b):
+            print(st)
+            print("start %s" % func.__name__)
+            func(a, b)
+            print("stop")
 
+        return wapper
+
+    return tips
+
+
+@new_tips("add")
+def add(a, b):
+    return a + b
+
+
+@new_tips("sub")
+def sub(a, b):
+    return a - b
+
+
+add(1, 2)
+sub(3, 2)
+~~~~
 
 ##  32 自定义上下文管理器
 
+* 上下文管理器
 
+~~~~python
+with open("text.txt") as f:
+    for line in f:
+        print(line)
+~~~~
 
 # 第九章 模块
 
 ##  33 模块的定义
 
+* 模块是在代码量变得相当大之后，为了将需要重复使用的又组织的代码放在一起，这部分代码可以附加到现有的程序中，附加的过程叫做导入（import）
 
+  * ~~~
+    import 模块名称
+    from 模块名称 import 方法名
+    ~~~
 
 #  第十章 语法规范
 
 ##  34 PEP8编码规范
 
-
+~~~
+The Zen of Python, by Tim Peters
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren't special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+Although that way may not be obvious at first unless you're Dutch.
+Now is better than never.
+Although never is often better than *right* now.
+If the implementation is hard to explain, it's a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea -- let's do more of those!
+~~~
 
 #  第十一章 面向对象编程
 
 ##  35 类与实例
 
+~~~python
+class User():
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
 
+    def print_role(self):
+        print("%s ： %s" % (self.name, self.age))
+
+
+user1 = User("jack", "14")
+user2 = User("tom", 20)
+
+user1.print_role()
+user2.print_role()
+~~~
 
 ##  36 如何增加类的属性和方法
 
+~~~~python
+class User():
+    def __init__(self, name, age, sex):
+        self.__name = name  # 变量是属性
+        self.age = age
+        self.sex = sex
 
+    def print_role(self):
+        # 函数是方法
+        print("%s %s %s" % (self.__name, self.age, self.sex))
+
+    def updateName(self, newName):
+        self.name = newName
+
+
+class Monster():
+    pass
+
+
+user1 = User("jack", "14", "男")
+user2 = User("tom", 20, "女")
+
+user1.print_role()
+user2.print_role()
+user1.updateName("pony")
+user1.print_role()
+~~~~
 
 ##  37 类的继承
+
+~~~python
+class Monster():
+    def __init__(self, hp=100):
+        self.hp = hp
+
+    def run(self):
+        print("移动到一个位置")
+
+    def who(self):
+        print("我是父类")
+
+
+class Animels(Monster):
+    def __init__(self, hp=10):
+        super().__init__(hp)
+
+
+class Boss(Monster):
+    def __init__(self, hp=1000):
+        super().__init__(hp)
+
+    def who(self):
+        print("我是子类")
+
+
+ani = Animels()
+print(ani.hp)
+ani.run()
+
+boss = Boss()
+boss.who()
+
+print(type(a1))
+print(type(ani))
+print(type(boss))
+
+print(isinstance(a1, Monster))
+~~~
 
 
 
 ## 38 类的使用-自定义with语句
 
+~~~python
+class TestWith():
+    def __enter__(self):
+        print("开始运行")
 
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if exc_tb is None:
+            print("end1")
+        else:
+            print("is %s" % exc_tb)
+
+
+with TestWith():
+    raise NameError("name错误")
+~~~
 
 #  第十二章 多线程编程
 
