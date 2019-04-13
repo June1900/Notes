@@ -644,9 +644,88 @@ with TestWith():
 
 ##  39 多线程编程的定义
 
+~~~python
+import threading
+import time
+from threading import current_thread
+
+
+def myThread(arg1, arg2):
+    print(current_thread().getName(), "start")
+    print("%s %s" % (arg1, arg2))
+    time.sleep(1)
+    print(current_thread().getName(), "stop")
+
+
+for i in range(1, 10, 1):
+    t = threading.Thread(target=myThread, args=(i, i + 1))
+    t.start()
+
+print(current_thread().getName(), "end")
+~~~
+
+~~~python
+class MyThread(threading.Thread):
+    def run(self):
+        print(current_thread().getName(), "start")
+        print("run")
+        print(current_thread().getName(), "stop")
+
+
+t1 = MyThread()
+t1.start()
+t1.join()
+~~~
+
 
 
 ##  40 经典的生产者与消费者问题
+
+~~~~python
+from threading import Thread,current_thread
+import time
+import random
+from queue import Queue
+
+queue = Queue(5)
+
+class ProducerThread(Thread):
+    def run(self):
+        name = current_thread().getName()
+        nums = range(100)
+        global queue
+        while True:
+            num = random.choice(nums)
+            queue.put(num)
+            print('生产者 %s 生产了数据 %s' %(name, num))
+            t = random.randint(1,3)
+            time.sleep(t)
+            print('生产者 %s 睡眠了 %s 秒' %(name, t))
+
+class ConsumerTheard(Thread):
+    def run(self):
+        name = current_thread().getName()
+        global queue
+        while True:
+            num = queue.get()
+            queue.task_done()
+            print('消费者 %s 消耗了数据 %s' %(name, num))
+            t = random.randint(1,5)
+            time.sleep(t)
+            print('消费者 %s 睡眠了 %s 秒' % (name, t))
+
+
+p1 = ProducerThread(name = 'p1')
+p1.start()
+p2 = ProducerThread(name = 'p2')
+p2.start()
+p3 = ProducerThread(name = 'p3')
+p3.start()
+c1 = ConsumerTheard(name = 'c1')
+c1.start()
+c2 = ConsumerTheard(name = 'c2')
+c2.start()
+~~~~
 
 
 
@@ -654,11 +733,18 @@ with TestWith():
 
 ##  41 Python标准库的定义
 
-
+* 通过Python的官方网站查看
 
 ##  42 正则表达式库re
 
+* 文字的处理功能re
 
+~~~Python
+import re
+
+p = re.compile("a")
+print(p.match("b"))
+~~~
 
 ##  43 正则表达式的元字符
 
