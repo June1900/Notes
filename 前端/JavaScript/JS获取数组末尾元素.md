@@ -11,8 +11,6 @@ console.log(array)
 console.log(popArr)
 ~~~
 
-
-
 ##  第二种
 
 ~~~javascript
