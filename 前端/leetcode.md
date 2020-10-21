@@ -102,12 +102,28 @@ var hasCycle = function(head) {
 
 ~~~javascript
 /**
- * @param {number[]} nums1
- * @param {number[]} nums2
- * @return {number[]}
+ * 方法一：set
  */
 var intersection = function(nums1, nums2) {
 	return [ ...new Set(nums1) ].filter((_value) => nums2.includes(_value));
+};
+
+/**
+ * 方法二：map
+ */
+var intersection = function(nums1, nums2) {
+	let map = new Map();
+	nums1.forEach((v) => {
+		map.set(v, true);
+	});
+	let res = [];
+	nums2.forEach((v) => {
+		if (map.get(v)) {
+			res.push(v);
+			map.delete(v);
+		}
+	});
+	return res;
 };
 ~~~
 
