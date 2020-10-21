@@ -22,7 +22,7 @@ RecentCounter.prototype.ping = function(t) {
 };
 ~~~
 
-#  有效的括号
+#  20.有效的括号
 
 > 给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串，判断字符串是否有效。
 >
@@ -33,6 +33,9 @@ RecentCounter.prototype.ping = function(t) {
 > 注意空字符串可被认为是有效字符串。
 
 ~~~javascript
+/**
+ * 方法1
+ */
 var isValid = function(s) {
 	if (s.length % 2 === 1) {
 		return false;
@@ -53,6 +56,34 @@ var isValid = function(s) {
 	}
 	return statck.length === 0;
 };
+/**
+ * 方法2
+ */
+var isValid = function(s) {
+	if (s.length % 2 === 1) {
+		return false;
+	}
+	const statck = [];
+	let map = new Map();
+	map.set('(', ')');
+	map.set('[', ']');
+	map.set('{', '}');
+	for (let i = 0; i < s.length; i++) {
+		const c = s[i];
+		if (map.get(c)) {
+			statck.push(s[i]);
+		} else {
+			let t = statck[statck.length - 1];
+			if (map.get(t) === c) {
+				statck.pop();
+			} else {
+				return false;
+			}
+		}
+	}
+	return statck.length === 0;
+};
+
 
 ~~~
 
