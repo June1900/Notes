@@ -1220,7 +1220,7 @@ var mergeTwoLists = function(l1, l2) {
 };
 ~~~
 
-## 374.猜数字大小
+# 374.猜数字大小
 
 > 猜数字游戏的规则如下：
 >
@@ -1278,6 +1278,51 @@ var guessNumber = function(n) {
 			high = mid - 1;
 		}
 	}
+};
+~~~
+
+# 226.翻转二叉树
+
+> 翻转一棵二叉树。
+>
+> 示例：
+>
+> 输入：
+>
+>      4
+>    /   \
+>   2     7
+>  / \   / \
+> 1   3 6   9
+> 输出：
+>
+>      4
+>    /   \
+>   7     2
+>  / \   / \
+> 9   6 3   1
+
+~~~javascript
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {TreeNode}
+ */
+var invertTree = function(root) {
+    if(!root){
+        return null;
+    }
+    return {
+        val: root.val,
+        left: invertTree(root.right),
+        right: invertTree(root.left)
+    }
 };
 ~~~
 
